@@ -1,3 +1,3 @@
 Safety-Challenge
 
-Given the telematics data, detect dangerous driving trips.
+Given the telematics data to detect dangerous driving trips.
