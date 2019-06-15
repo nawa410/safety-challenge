@@ -11,8 +11,8 @@ import xgboost as xgb
 import lightgbm as lgbm
 
 #%%
-features = pd.read_csv('data/processed/features_1560570749.csv')
-label = pd.read_csv('data/processed/label_cleaned_1560575715.csv')
+features = pd.read_csv('data/processed/features_1560613343.csv')
+label = pd.read_csv('data/processed/label_cleaned_1560613042.csv')
 
 data = pd.merge(features, label, on='bookingID', how='inner')
 data = data.drop("bookingID", axis=1)
@@ -117,24 +117,23 @@ start_time = time.time()
 
 rf_model = RandomForestClassifier(
     n_jobs=4,
-    n_estimators=250,
-    max_depth=1.0
+    n_estimators=500,
+    max_depth=10
 )
 
 xgb_model = xgb.XGBClassifier(
-    n_estimators=500,
-    learning_rate=0.01,
+    n_estimators=400,
     n_jobs=4,
-    max_depth=3,
-    colsample_bytree=0.7013,
-    gamma=0.2683
+    max_depth=2,
+    colsample_bytree=0.8695,
+    gamma=0.0216
 )
 
 lgbm_model = lgbm.LGBMClassifier(
-    n_estimators=500,
-    learning_rate=0.01,
-    num_leaves=126,
-    colsample_bytree=0.3484
+    n_estimators=300,
+    num_leaves=90,
+    colsample_bytree=0.4484,
+    max_depth=2
 )
 
 models = [
@@ -145,7 +144,7 @@ models = [
 
 for label, model in models:
     scores = cross_val_score(model, X, Y, cv=StratifiedKFold(n_splits=5), scoring='roc_auc')
-    print("Gini coefficient: %0.4f (+/- %0.4f) [%s]" % (scores.mean(), scores.std(), label))
+    print("ROC AUC: %0.4f (+/- %0.4f) [%s]" % (scores.mean(), scores.std(), label))
 
 print("--- %s seconds ---" % (time.time() - start_time))
 #%%
