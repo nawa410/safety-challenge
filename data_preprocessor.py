@@ -56,7 +56,7 @@ class DataPreprocessor:
         label = label.reset_index(drop=True)
         
         ts = calendar.timegm(time.gmtime())
-        features.to_csv('data/interim/features_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
+        #features.to_csv('data/interim/features_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
         label.to_csv('data/processed/label_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
         
         return features, label
@@ -83,13 +83,13 @@ class DataPreprocessor:
             
         features = pd.DataFrame(data=data, columns=column_names)
         ts = calendar.timegm(time.gmtime())
-        features.to_csv('data/interim/features_res_changes_'+str(ts)+'.csv', encoding='utf-8', index=False)
+        #features.to_csv('data/interim/features_res_changes_'+str(ts)+'.csv', encoding='utf-8', index=False)
         
         features_agg = self.__aggregate(data, column_names)
-        features_agg.to_csv('data/interim/features_aggregate_'+str(ts)+'.csv', encoding='utf-8', index=False)
+        #features_agg.to_csv('data/interim/features_aggregate_'+str(ts)+'.csv', encoding='utf-8', index=False)
         
         features_agg = self.__calculate_std(data, features_agg, column_names)
-        features_agg.to_csv('data/interim/features_aggregate_std_'+str(ts)+'.csv', encoding='utf-8', index=False)
+        #features_agg.to_csv('data/interim/features_aggregate_std_'+str(ts)+'.csv', encoding='utf-8', index=False)
         
         # drop column with prefix_name: sum_
         for c in column_names:
