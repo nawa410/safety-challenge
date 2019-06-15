@@ -27,7 +27,7 @@ def objective(params):
         'n_estimators': int(params['n_estimators']), 
         'max_depth': int(params['max_depth'])
     }
-    clf = RandomForestClassifier(n_jobs=4, **params)
+    clf = RandomForestClassifier(n_jobs=6, **params)
     score = cross_val_score(clf, X, Y, scoring='roc_auc', cv=StratifiedKFold(n_splits=5)).mean()
     print("ROC-AUC {:.3f} params {}".format(score, params))
 
@@ -57,7 +57,7 @@ def objective(params):
         'n_estimators': int(params['n_estimators']),
         'max_depth': int(params['max_depth'])
     }
-    clf = xgb.XGBClassifier(n_jobs=4, **params)    
+    clf = xgb.XGBClassifier(n_jobs=6, **params)    
     score = cross_val_score(clf, X, Y, scoring='roc_auc', cv=StratifiedKFold(n_splits=5)).mean()
     print("ROC-AUC {:.3f} params {}".format(score, params))
 
@@ -90,7 +90,7 @@ def objective(params):
         'n_estimators': int(params['n_estimators']),
         'max_depth': int(params['max_depth'])
     }    
-    clf = lgbm.LGBMClassifier(n_jobs=4, **params)    
+    clf = lgbm.LGBMClassifier(n_jobs=6, **params)    
     score = cross_val_score(clf, X, Y, scoring='roc_auc', cv=StratifiedKFold(n_splits=5)).mean()
     print("ROC-AUC {:.3f} params {}".format(score, params))
 

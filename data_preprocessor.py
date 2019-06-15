@@ -56,8 +56,8 @@ class DataPreprocessor:
         label = label.reset_index(drop=True)
         
         ts = calendar.timegm(time.gmtime())
-        #features.to_csv('data/interim/features_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
-        #label.to_csv('data/processed/label_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
+        features.to_csv('data/interim/features_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
+        label.to_csv('data/processed/label_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
         
         return features, label
     
@@ -130,6 +130,12 @@ class DataPreprocessor:
                 j = 12
                 while j <= 22 :
                     data[i][j] = abs(data[i][j-11] - data[i-1][j-11])
+
+                    # special case for Bearing_changes.. 
+                    if j == 13:
+                        if data[i][j] >= 180:
+                            data[i][j] = 360 - data[i][j]
+            
                     j += 1
             last_trip = data[i][0]
         
