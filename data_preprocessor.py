@@ -58,7 +58,8 @@ class DataPreprocessor:
         ts = calendar.timegm(time.gmtime())
         #features.to_csv('data/interim/features_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
         label.to_csv('data/processed/label_cleaned_'+str(ts)+'.csv', encoding='utf-8', index=False)
-        
+        print('data/processed/label_cleaned_'+str(ts)+'.csv')
+
         return features, label
     
     def feature_engineering(self, features):
@@ -97,6 +98,7 @@ class DataPreprocessor:
                 features_agg = features_agg.drop(c, axis=1)
         
         features_agg.to_csv('data/processed/features_'+str(ts)+'.csv', encoding='utf-8', index=False)
+        print('Features: data/processed/features_'+str(ts)+'.csv')
 
         return features_agg
         

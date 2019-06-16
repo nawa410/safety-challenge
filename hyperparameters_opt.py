@@ -1,4 +1,3 @@
-#%%
 import pandas as pd
 import numpy as np
 import time
@@ -10,16 +9,11 @@ from sklearn.ensemble import RandomForestClassifier
 import xgboost as xgb
 import lightgbm as lgbm
 
-#%%
-features = pd.read_csv('data/processed/features_1560613343.csv')
-label = pd.read_csv('data/processed/label_cleaned_1560613042.csv')
+from prepare_training_data import get_training_data
 
-data = pd.merge(features, label, on='bookingID', how='inner')
-data = data.drop("bookingID", axis=1)
-X = data.loc[:, data.columns != 'label']
-Y = data['label']
+X, Y = get_training_data()
 
-#%%
+## Hyperopt for Random Forest Start #####
 start_time = time.time()
 
 def objective(params):
@@ -27,7 +21,7 @@ def objective(params):
         'n_estimators': int(params['n_estimators']), 
         'max_depth': int(params['max_depth'])
     }
-    clf = RandomForestClassifier(n_jobs=6, **params)
+    clf = RandomForestClassifier(n_jobs=4, **params)
     score = cross_val_score(clf, X, Y, scoring='roc_auc', cv=StratifiedKFold(n_splits=5)).mean()
     print("ROC-AUC {:.3f} params {}".format(score, params))
 
@@ -46,8 +40,9 @@ best = fmin(fn=objective,
 
 print("Random Forest: Hyperopt estimated optimum {}".format(best))
 print("--- %s seconds ---" % (time.time() - start_time))
+## Hyperopt for Random Forest End #####
 
-#%%
+## Hyperopt for XGBoost Start #####
 start_time = time.time()
 
 def objective(params):
@@ -57,7 +52,7 @@ def objective(params):
         'n_estimators': int(params['n_estimators']),
         'max_depth': int(params['max_depth'])
     }
-    clf = xgb.XGBClassifier(n_jobs=6, **params)    
+    clf = xgb.XGBClassifier(n_jobs=4, **params)    
     score = cross_val_score(clf, X, Y, scoring='roc_auc', cv=StratifiedKFold(n_splits=5)).mean()
     print("ROC-AUC {:.3f} params {}".format(score, params))
 
@@ -77,10 +72,10 @@ best = fmin(fn=objective,
             max_evals=50)
 
 print("XGBoost: Hyperopt estimated optimum {}".format(best))
-
 print("--- %s seconds ---" % (time.time() - start_time))
+## Hyperopt for XGBoost End #####
 
-#%%
+## Hyperopt for LightGBM Start #####
 start_time = time.time()
 
 def objective(params):
@@ -90,7 +85,7 @@ def objective(params):
         'n_estimators': int(params['n_estimators']),
         'max_depth': int(params['max_depth'])
     }    
-    clf = lgbm.LGBMClassifier(n_jobs=6, **params)    
+    clf = lgbm.LGBMClassifier(n_jobs=4, **params)    
     score = cross_val_score(clf, X, Y, scoring='roc_auc', cv=StratifiedKFold(n_splits=5)).mean()
     print("ROC-AUC {:.3f} params {}".format(score, params))
 
@@ -111,40 +106,4 @@ best = fmin(fn=objective,
 
 print("LightGBM: Hyperopt estimated optimum {}".format(best))
 print("--- %s seconds ---" % (time.time() - start_time))
-
-#%%
-start_time = time.time()
-
-rf_model = RandomForestClassifier(
-    n_jobs=4,
-    n_estimators=500,
-    max_depth=10
-)
-
-xgb_model = xgb.XGBClassifier(
-    n_estimators=400,
-    n_jobs=4,
-    max_depth=2,
-    colsample_bytree=0.8695,
-    gamma=0.0216
-)
-
-lgbm_model = lgbm.LGBMClassifier(
-    n_estimators=300,
-    num_leaves=90,
-    colsample_bytree=0.4484,
-    max_depth=2
-)
-
-models = [
-    ('Random Forest', rf_model),
-    ('XGBoost', xgb_model),
-    ('LightGBM', lgbm_model),
-]
-
-for label, model in models:
-    scores = cross_val_score(model, X, Y, cv=StratifiedKFold(n_splits=5), scoring='roc_auc')
-    print("ROC AUC: %0.4f (+/- %0.4f) [%s]" % (scores.mean(), scores.std(), label))
-
-print("--- %s seconds ---" % (time.time() - start_time))
-#%%
+## Hyperopt for LightGBM End #####
