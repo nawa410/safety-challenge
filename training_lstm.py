@@ -2,8 +2,8 @@
 #%%
 import pandas as pd
 
-features = pd.read_csv('data/interim/features_cleaned_1560214342.csv')
-label = pd.read_csv('data/interim/label_cleaned_1560214342.csv')
+features = pd.read_csv('data/interim/features_cleaned_1560667948.csv')
+label = pd.read_csv('data/processed/label_cleaned_1560667948.csv')
 
 
 #%%
