@@ -8,7 +8,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
-from final_model import get_model
+from model_configuration import get_model
 from prepare_training_data import get_training_data
 
 def cross_validate(model, kfold, X, Y) :

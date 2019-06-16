@@ -1,6 +1,6 @@
 import pandas as pd
 import pickle
-from final_model import get_model
+from model_configuration import get_model
 from prepare_training_data import get_training_data
 
 X, Y = get_training_data()
