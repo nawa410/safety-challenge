@@ -1,5 +1,6 @@
 # Problem's brief description
-	Dataset contains telematics data during trips (bookingID). Each trip is assigned with label 1 or 0 to indicate dangerous driving and could contain thousands of telematics data points. 
+Dataset contains telematics data during trips (bookingID). 
+Each trip is assigned with label 1 or 0 to indicate dangerous driving and could contain thousands of telematics data points. 
 
 # Data preprocessing
 	- Data cleansing for training
