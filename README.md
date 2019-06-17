@@ -6,12 +6,12 @@ Each trip is assigned with label 1 or 0 to indicate dangerous driving and could 
 - Data cleansing for training
 	- Delete trips with multiple (different) labels
 	- Delete data points that have speed below zero
-- Feature engineering
-	Assuming the trip can be said to be dangerous if one of these conditions occurs:
-		+ High speed experienced by the driver
-		+ A drastic change in speed, accelerometer or gyroscope after 1 or 2 seconds later. 
-			This might indicate a sudden acceleration, sudden brake or turn suddenly.
 
+Assuming the trip can be said to be dangerous if one of these conditions occurs:
++ High speed experienced by the driver
++ A drastic change in speed, accelerometer or gyroscope after 1 or 2 seconds later. This might indicate a sudden acceleration, sudden brake or turn suddenly.
+		
+- Feature engineering	
 	- Sort the dataset by bookingID and second 
 	- Calculate acceleration and gyroscope resultan (x, y, z)
 	- Calculate all the changes (Speed, Acceleration resultan, Bearing, etc) after 1 or 2 seconds later in each rows. 
