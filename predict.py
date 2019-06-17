@@ -19,9 +19,9 @@ for f in files:
 features = pd.concat(features)
 features = features.sort_values(by=['bookingID', 'second'])
 
-#dp = DataPreprocessor()
-#features = dp.feature_engineering(features)
-features = pd.read_csv('data/processed/features_1560688534.csv')
+dp = DataPreprocessor()
+features = dp.feature_engineering(features)
+#features = pd.read_csv('data/processed/features_1560688534.csv')
 
 files = []
 for r, d, f in os.walk('data/raw/labels/'):

@@ -12,8 +12,8 @@ def generate_training_data():
    dp.prepare_training_data(features_filenames, label_filename)
 
 def get_training_data():
-   features = pd.read_csv('data/processed/features_1560613343.csv')
-   label = pd.read_csv('data/processed/label_cleaned_1560613042.csv')
+   features = pd.read_csv('data/processed/features_1560696848.csv')
+   label = pd.read_csv('data/processed/label_cleaned_1560696207.csv')
 
    data = pd.merge(features, label, on='bookingID', how='inner')
    data = data.drop("bookingID", axis=1)

@@ -62,7 +62,7 @@ class DataPreprocessor:
     
     def feature_engineering(self, features):
         features = features.sort_values(by=['bookingID', 'second'])
-        features = features.drop("second", axis=1)
+        #features = features.drop("second", axis=1)
         features = features.reset_index(drop=True)
         
         # it's faster to process if dataframe is converted to numpy array first
@@ -111,33 +111,38 @@ class DataPreprocessor:
         for i in range(m):
             if i%1000000 == 0 :
                 print('calculate resultan : '+str(i)+' / '+str(m))
-            data[i][10] = math.sqrt((data[i][3]*data[i][3]) + (data[i][4]*data[i][4]) + (data[i][5]*data[i][5]))
-            data[i][11] = math.sqrt((data[i][6]*data[i][6]) + (data[i][7]*data[i][7]) + (data[i][8]*data[i][8]))
+            data[i][11] = math.sqrt((data[i][3]*data[i][3]) + (data[i][4]*data[i][4]) + (data[i][5]*data[i][5]))
+            data[i][12] = math.sqrt((data[i][6]*data[i][6]) + (data[i][7]*data[i][7]) + (data[i][8]*data[i][8]))
         
         return data
     
     def __calculate_changes_overtime(self, data):
         m, n = data.shape
-         # extra columns, 11: all columns except bookingID
-        extra_cols = np.zeros([m, 11], dtype = float)
+         # extra columns, 12: all columns except bookingID
+        extra_cols = np.zeros([m, 12], dtype = float)
         data = np.append(data, extra_cols, axis=1)
         
         last_trip = ''
+        last_second = 0
         for i in range(m):
             if i%1000000 == 0 :
                 print('calculate changes overtime : '+str(i)+' / '+str(m))
             if data[i][0] == last_trip :
-                j = 12
-                while j <= 22 :
-                    data[i][j] = abs(data[i][j-11] - data[i-1][j-11])
+                j = 13
+                while j <= 24 :
+                    data[i][j] = abs(data[i][j-12] - data[i-1][j-12])
 
                     # special case for Bearing_changes.. 
-                    if j == 13:
+                    if j == 14:
                         if data[i][j] >= 180:
                             data[i][j] = 360 - data[i][j]
+                    # if they are non-consecutive seconds
+                    if data[i][9] - last_second > 3:
+                        data[i][j] = 0
             
                     j += 1
             last_trip = data[i][0]
+            last_second = data[i][9]
         
         return data
          
@@ -234,8 +239,8 @@ class DataPreprocessor:
         j = 0
         k = 0
         m, n = data.shape
-        features_agg_arr = features_agg.values
-        agg_columns = list(features_agg.columns.values)
+        #features_agg_arr = features_agg.values
+        #agg_columns = list(features_agg.columns.values)
         for i in range(m):
             if i%1000000 == 0 :
                 print('calculate std : '+str(i)+' / '+str(m))
@@ -246,8 +251,8 @@ class DataPreprocessor:
                 for k in range(len(column_names)):
                     if column_names[k] == 'bookingID':
                         continue
-                    #features_agg.at[j, 'std_'+column_names[k]] = math.sqrt(save[column_names[k]]/features_agg.at[j, 'n_rows'])        
-                    features_agg_arr[j][k*6] = math.sqrt(save[column_names[k]]/features_agg_arr[j][1])  
+                    features_agg.at[j, 'std_'+column_names[k]] = math.sqrt(save[column_names[k]]/features_agg.at[j, 'n_rows'])        
+                    #features_agg_arr[j][k*6] = math.sqrt(save[column_names[k]]/features_agg_arr[j][1])  
                 for c in column_names:
                     if c == 'bookingID':
                         continue
@@ -259,17 +264,17 @@ class DataPreprocessor:
             for k in range(len(column_names)):
                 if column_names[k] == 'bookingID':
                     continue
-                #save[column_names[k]] += (data[i][k]-features_agg.at[j, 'mean_'+column_names[k]]) * (data[i][k]-features_agg.at[j, 'mean_'+column_names[k]])
-                save[column_names[k]] += (data[i][k]-features_agg_arr[j][5*k+(k-1)]) * (data[i][k]-features_agg_arr[j][5*k+(k-1)])
+                save[column_names[k]] += (data[i][k]-features_agg.at[j, 'mean_'+column_names[k]]) * (data[i][k]-features_agg.at[j, 'mean_'+column_names[k]])
+                #save[column_names[k]] += (data[i][k]-features_agg_arr[j][5*k+(k-1)]) * (data[i][k]-features_agg_arr[j][5*k+(k-1)])
             first = False
         
         for k in range(len(column_names)):
             if column_names[k] == 'bookingID':
                 continue
-            #features_agg.at[j, 'std_'+column_names[k]] = math.sqrt(save[column_names[k]]/features_agg.at[j, 'n_rows'])
-            features_agg_arr[j][k*6] = math.sqrt(save[column_names[k]]/features_agg_arr[j][1])
+            features_agg.at[j, 'std_'+column_names[k]] = math.sqrt(save[column_names[k]]/features_agg.at[j, 'n_rows'])
+            #features_agg_arr[j][k*6] = math.sqrt(save[column_names[k]]/features_agg_arr[j][1])
         
-        features_agg = pd.DataFrame(features_agg_arr, columns=agg_columns)
+        #features_agg = pd.DataFrame(features_agg_arr, columns=agg_columns)
 
         return features_agg
         

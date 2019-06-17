@@ -6,8 +6,8 @@ from sklearn.model_selection import cross_val_score, StratifiedKFold
 from sklearn.metrics import make_scorer
 
 from sklearn.ensemble import RandomForestClassifier
-import xgboost as xgb
-import lightgbm as lgbm
+from xgboost import XGBClassifier
+from lightgbm import LGBMClassifier
 
 from prepare_training_data import get_training_data
 
@@ -52,7 +52,7 @@ def objective(params):
         'n_estimators': int(params['n_estimators']),
         'max_depth': int(params['max_depth'])
     }
-    clf = xgb.XGBClassifier(n_jobs=4, **params)    
+    clf = XGBClassifier(n_jobs=4, **params)    
     score = cross_val_score(clf, X, Y, scoring='roc_auc', cv=StratifiedKFold(n_splits=5)).mean()
     print("ROC-AUC {:.3f} params {}".format(score, params))
 
@@ -85,7 +85,7 @@ def objective(params):
         'n_estimators': int(params['n_estimators']),
         'max_depth': int(params['max_depth'])
     }    
-    clf = lgbm.LGBMClassifier(n_jobs=4, **params)    
+    clf = LGBMClassifier(n_jobs=4, **params)    
     score = cross_val_score(clf, X, Y, scoring='roc_auc', cv=StratifiedKFold(n_splits=5)).mean()
     print("ROC-AUC {:.3f} params {}".format(score, params))
 

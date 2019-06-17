@@ -12,8 +12,9 @@ from model_configuration import get_model
 from prepare_training_data import get_training_data
 
 def cross_validate(model, kfold, X, Y) :
-    # plot arrows
-    fig1 = plt.figure(figsize=[12,12])
+    # ROC-AUC plot is from some Kaggle kernel
+
+    fig1 = plt.figure(figsize=[10,10])
     ax1 = fig1.add_subplot(111,aspect = 'equal')
     ax1.add_patch( patches.Arrow(0.45,0.5,-0.25,0.25,width=0.3,color='green',alpha = 0.5) )
     ax1.add_patch( patches.Arrow(0.5,0.45,0.25,-0.25,width=0.3,color='red',alpha = 0.5) )
