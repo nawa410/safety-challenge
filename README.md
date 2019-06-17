@@ -1,7 +1,7 @@
-## Problem's brief definition
+# Problem's brief description
 	Dataset contains telematics data during trips (bookingID). Each trip is assigned with label 1 or 0 to indicate dangerous driving and could contain thousands of telematics data points. 
 
-## Data preprocessing
+# Data preprocessing
 	- Data cleansing for training
 		- Delete trips with multiple (different) labels
 		- Delete data points that have speed below zero
@@ -17,13 +17,13 @@
 			If the difference in seconds is large (more than 2 seconds), then ignore (set the value to zero). 
 			Special case for Bearing_changes, its angle change should be no more than 180.	
 		- Calculate the aggregation (Min, Max, Mean, Standard Deviation, Range) based on bookingID and all columns.
-## Models
+# Models
 	Using Voting Ensemble as a meta-ensemble model consisting of Random Forest (Scikit-Learn) and Gradient Boosting (XGBoost and LightGBM).
 
-## Hyperparameters optimization
+# Hyperparameters optimization
 	Using the hyperopt library (http://hyperopt.github.io/hyperopt/) to optimize Random Forest, XGBoost, and LightGBM Hyperparameters.
 
-## Project structure
+# Project structure
 	- data 
 		+ raw : storing the raw dataset
 		+ interim : storing the intermediate result 
@@ -40,10 +40,10 @@
 	- training.py : training the model
 	- predict.py : predict the output of dataset that is in folder 'data/raw/features/' and store the output in folder 'output/'
 	
-## ROC-AUC with 10-fold Cross Validation
+# ROC-AUC with 10-fold Cross Validation
 ![alt text](https://raw.githubusercontent.com/nawa410/safety-challenge/master/images/10-Fold%20Cross%20Validation/ensemble.png)
 
-## How to predict using the model trained
+# How to predict using the model trained
 	- Prerequisite: Python 3, Pandas, Numpy, and Scikit-Learn.
 	- Put the datasets in the 'data/raw/features/' folder
 	- run 'python predict.py' 
