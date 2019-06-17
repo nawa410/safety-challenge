@@ -5,7 +5,7 @@ Each trip is assigned with label 1 or 0 to indicate dangerous driving and could 
 # Data preprocessing
 - Data cleansing for training
 	- Delete trips with multiple (different) labels.
-	- Delete data points that have speed below zero. Because data points that have speeds below 0 are few in number, it is safe to delete them
+	- Delete data points that have speed below zero. Because there are few data points that have speed below 0, it is safe to delete them.
 
 - Assuming the trip can be said to be dangerous if one of these conditions occurs:
 	+ Driving at high speed.
