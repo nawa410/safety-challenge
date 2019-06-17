@@ -32,7 +32,6 @@ space = {
     'max_depth': hp.quniform('max_depth', 1, 10, 1)
 }
 
-trials = Trials()
 best = fmin(fn=objective,
             space=space,
             algo=tpe.suggest,
@@ -65,7 +64,6 @@ space = {
     'max_depth': hp.quniform('max_depth', 1, 10, 1)
 }
 
-trials = Trials()
 best = fmin(fn=objective,
             space=space,
             algo=tpe.suggest,
@@ -98,7 +96,6 @@ space = {
     'max_depth': hp.quniform('max_depth', 1, 10, 1)
 }
 
-trials = Trials()
 best = fmin(fn=objective,
             space=space,
             algo=tpe.suggest,
