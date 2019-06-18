@@ -21,7 +21,7 @@ features = features.sort_values(by=['bookingID', 'second'])
 
 dp = DataPreprocessor()
 features = dp.feature_engineering(features)
-#features = pd.read_csv('data/processed/features_1560688534.csv')
+#features = pd.read_csv('data/processed/features_1560750238.csv')
 
 files = []
 for r, d, f in os.walk('data/raw/labels/'):
@@ -49,12 +49,18 @@ if(true_values_exist) :
 
 model = pickle.load(open('models/rf_xgb_lgbm_ensemble.sav', 'rb'))
 
+ts = calendar.timegm(time.gmtime())
+
 predictions = model.predict_proba(X)
 predictions = predictions[:, 1]
 df_predictions = pd.DataFrame({ 'bookingID': bookingID, 'label': predictions })
-ts = calendar.timegm(time.gmtime())
+df_predictions.to_csv("output/predictions_proba_"+str(ts)+".csv", index=False)
+print("Predicted (proba labels) values is saved in: 'output/predictions_proba_"+str(ts)+".csv'")
+
+predictions = model.predict(X)
+df_predictions = pd.DataFrame({ 'bookingID': bookingID, 'label': predictions })
 df_predictions.to_csv("output/predictions_"+str(ts)+".csv", index=False)
-print("Predicted values is saved in: 'output/predictions_"+str(ts)+".csv'")
+print("Predicted (rigid labels) values is saved in: 'output/predictions_"+str(ts)+".csv'")
 
 if(true_values_exist) :
     score = roc_auc_score(Y, predictions)
